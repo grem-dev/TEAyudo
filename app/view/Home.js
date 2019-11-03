@@ -28,11 +28,13 @@ import { Card } from '../components/MenuComponents';
 
 
 export default class Home extends Component {
+
+	
 	constructor(props) {
 		super(props);
 		this.state = {
 			options: [
-				{ title: "Operaciones", description: "Acomoda las piezas", action: () => Actions.operations({level:1}) },
+				{ title: "Operaciones", description: "Acomoda las piezas", action: () => Actions.operations({ level: 1, time:1}) },
 				{ title: "Par de letras", description: "Busca el par de cada letra" },
 				{ title: "Par de letras", description: "Busca el par de cada letra" },
 				{ title: "Pares de numeros", description: "Busca el par de cada numero" }
@@ -47,7 +49,7 @@ export default class Home extends Component {
 		return (
 			<View>
 				<FlatList
-					style={sheet.container}
+					style={localSheet.container}
 					data={this.state.options}
 					numColumns={1}
 					renderItem={({ item }) => this.renderItem(item)}
@@ -59,9 +61,9 @@ export default class Home extends Component {
 
 
 
-const sheet = StyleSheet.create({
+const localSheet = StyleSheet.create({
 	container: {
 		margin: 3,
-		backgroundColor: 'rgb(200,100,33)',
+
 	}
 });

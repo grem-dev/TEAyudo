@@ -1,20 +1,38 @@
-import React, { Component } from 'react';
-import { Dimensions, StyleSheet, Text, View } from 'react-native';
+
+/**
+ * Default import systems
+ */
+import React, {
+	Component
+} from 'react';
+
+import {
+	Dimensions,
+	StyleSheet,
+	Text,
+	View,
+	FlatList,
+	TouchableOpacity
+} from 'react-native';
+
+import {
+	Actions
+} from 'react-native-router-flux';
+
+
+// Importhig local components
 import { Option, ValueContainer } from '../components/InteractableComponents';
+import { OptionMenu } from '../components/MenuComponents';
 import { GenerateOperation } from '../controllers/randomMats';
-import { LayoutSheet } from './css/layout';
-import { Actions } from 'react-native-router-flux';
 
 
+//  Importhing StyleSheets
+import {
+	LayoutSheet,
+	TestSheet
+} from './css/layout';
 
 
-
-const { width, height } = Dimensions.get('window');
-
-const ScreenWidth = width;
-
-
-const APPCOLOR2 = 'rgb(10,10,150)';
 const APPCOLOR = 'rgb(245,245,255)';
 
 
@@ -27,11 +45,12 @@ const localSheet = StyleSheet.create({
 		top: 0,
 		bottom: 0,
 	},
-	absoluteCenter: {
-		alignContent: 'center',
-		alignItems: 'center',
-
+	menuOption: {
+		flex: 1, backgroundColor: 'white',
+		elevation: 5, borderRadius: 3, margin: 4, justifyContent: 'center',
+		alignItems: 'center', minHeight: 100, flexDirection: 'row'
 	}
+
 });
 
 
@@ -42,23 +61,24 @@ export class OperationsView extends Component {
 		this.state = {
 			AppColor: APPCOLOR,
 			operation: new GenerateOperation(this.props.level),
-			level: 1
+			level: 1,
+			time: this.props.time,
 		};
+
+		console.log(this.state.time)
 	}
+
 
 	componentWillReceiveProps = () => {
 		this.setState({
 			operation: new GenerateOperation(this.props.level),
-			level: this.props.level
+			level: this.props.level,
+			time: this.props.time,
 		});
 
-		this.forceUpdate();
-	}
-	
-	componentDidMount = () => {
+		// console.log('Nuevos datos: time is: ', this.props.time)
 
 	}
-
 
 
 	makeOperation = (value) => {
@@ -67,7 +87,17 @@ export class OperationsView extends Component {
 
 		if (value === result) {
 
-			Actions.refresh({ level: 1 });
+			let newTime = this.props.time;
+			newTime++;
+			let newLevel = this.props.level;
+
+			if (newTime > 7) {
+				newTime = 1;
+				newLevel = this.state.level + 1;
+			}
+			console.log('Time: ', newTime)
+			console.log(newLevel)
+			Actions.refresh({ level: newLevel, time: newTime });
 			return true;
 
 		}
@@ -76,20 +106,13 @@ export class OperationsView extends Component {
 	}
 
 
-
 	/**
 	* @return Array of JSX.Elements with the values given
 	*/
 	addOperationElements = (items) => {
-		let len = 0;
-		items.forEach(i => {
-			len++;
-		});
-
-		let num = (ScreenWidth / len) / 1.2;
 
 		let output = items.map(element => {
-			return <ValueContainer size={num} value={element} />
+			return <ValueContainer valueSize={50} value={element} />
 		});
 
 		return output;
@@ -102,65 +125,53 @@ export class OperationsView extends Component {
 	insertOperation = () => {
 
 
-		let { first, second, operator, flag, result } = this.state.operation;
+		let { first, second, operator, result } = this.state.operation;
 
 		return (
 			<View
-				style={{ flexDirection: 'column', alignItems: 'center', height: '100%' }}
+				style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
 			>
-				<View style={{
-					flexDirection: 'row', height: '100%', alignItems: 'center',
-
-				}}
-				>
+				<View style={{ flexDirection: 'row' }}>
 					{this.addOperationElements([first, operator, second, '=', '?'])}
 				</View>
 			</View>
 		);
 	}
 
-	/**
-	 * Add the options for the operations previusly added
-	 */
-	insertOptions = () => {
 
-		let { extraValues } = this.state.operation;
+	/**
+	 * Render the items of the falt list wich is the option menu
+	 */
+	renderItemMenu = (item) => {
 
 		return (
-			<View style={[LayoutSheet.flexColumn]}>
-				<View style={[LayoutSheet.flexRow]}>
-					{this.parOptions([0, 1], extraValues)}
-				</View>
-				<View style={[LayoutSheet.flexRow]}>
-					{this.parOptions([2, 3], extraValues)}
-				</View>
-			</View>
+			<TouchableOpacity
+				style={localSheet.menuOption}
+				onPress={() => this.makeOperation(item)}
+			>
+				<ValueContainer valueSize={50} value={item} />
+			</TouchableOpacity>
 		);
-
-	}
-
-	/**
-	 * @Return a JSX.Element with the values Givens 
-	 */
-	parOptions = (positions, values) => {
-		let { extraValues } = this.state.operation;
-		return positions.map((item) => {
-			return <Option onPress={(value) => this.makeOperation(value)} value={extraValues[item]} />
-		});
-
-
 	}
 
 	render() {
+		let { options } = this.state.operation;
 
 		return (
 			<View style={localSheet.absoluteFill}>
 
-				<View style={[LayoutSheet.row]}>
+				<View style={[{ flex: 2 }]}>
 					{this.insertOperation()}
 				</View>
-				<View>
-					{this.insertOptions()}
+				<View style={[{ flex: 1 }]}>
+					<FlatList
+						numColumns={2}
+						data={options}
+						renderItem={({ item }) => {
+							return this.renderItemMenu(item);
+						}}
+
+					/>
 				</View>
 
 			</View>

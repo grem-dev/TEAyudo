@@ -23,20 +23,18 @@ export class Option extends Component {
 
 	componentWillReceiveProps = () => {
 
-		console.log(this.props.value)
 		this.setState({
 			value: this.props.value,
 			style: localSheet.enableCard,
 			disable: false,
 		});
-
-		this.forceUpdate();
+		this.render();
 	}
 
 
 
 	handlePress = () => {
-		console.log('i was pressed')
+
 		let result = this.state.onPress(this.state.value)
 
 		if (!result) {
@@ -58,13 +56,9 @@ export class Option extends Component {
 				onPress={() => this.handlePress()}
 				style={[localSheet.card, { ...this.state.style }]}
 			>
-				<View style={{
-					fontSize: 24, width: '100%',
-					flexDirection: 'column', alignItems: 'center',
-				}}
-				>
-					<Text style={{ fontSize: 34 }}>{this.state.value}</Text>
-				</View>
+
+				<Text style={{ fontSize: 34 }}>{this.state.value}</Text>
+
 			</TouchableOpacity>
 		)
 	}
@@ -76,7 +70,7 @@ export class ValueContainer extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			fontSize: new Animated.Value(0),
+			fontSize: new Animated.Value(this.props.valueSize),
 			value: new Animated.Value(2)
 		}
 	}
@@ -85,33 +79,28 @@ export class ValueContainer extends Component {
 
 	componentWillReceiveProps = () => {
 		this.animateStart();
-
 	}
 
 	componentDidMount = () => {
-
 		setTimeout(() => {
 			this.animateStart()
 		}, 500);
-
-
 	}
 
-
-	popUpAnimate = () => {
-
-
-	}
 
 	animateStart = () => {
+
+		let sizeAnimated = this.props.valueSize * 1.2;
+		let normalSize = this.props.valueSize;
+
 		Animated.sequence([
 			Animated.spring(
 				this.state.fontSize,
-				{ toValue: 90, friction: 75 }
+				{ toValue: sizeAnimated, friction: 75 }
 			),
 			Animated.spring(
 				this.state.fontSize,
-				{ toValue: 70, friction: 3 }
+				{ toValue: normalSize, friction: 3 }
 			),
 		]).start();
 	}
@@ -120,10 +109,8 @@ export class ValueContainer extends Component {
 	render() {
 
 		return (
-			<Animated.View
-				style={{ width: this.props.size, margin: this.state.value }}
-			>
-				<Animated.Text style={{ fontSize: this.state.fontSize, textAlign: 'center' }}>{this.props.value}</Animated.Text>
+			<Animated.View style={{flex:1, justifyContent: 'center',alignItems:'center'}}>
+				<Animated.Text style={{ fontSize: this.state.fontSize}}>{this.props.value}</Animated.Text>
 			</Animated.View>
 		);
 	}
@@ -133,9 +120,9 @@ const localSheet = StyleSheet.create({
 	card: {
 		borderRadius: 15,
 		margin: 5,
-		height: 120,
-		minWidth: 80,
-		flexDirection: 'row',
+		width: '100%',
+		height: '100%',
+		alignContent: 'center',
 		alignItems: 'center',
 		flex: 1,
 	},

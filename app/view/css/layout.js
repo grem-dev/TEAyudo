@@ -10,11 +10,18 @@ export const LayoutSheet = StyleSheet.create({
     flexColumn:{
         flexDirection: 'column',
     },
-    row: {
+    flex: {
         flex: 1,
+    },
+    flex2:{
+        flex:2
     },
     column: {
         flex:1
+    },
+    wh100:{
+        width: '100%',
+        height: '100%'
     },
     strechItems:{
         alignItems:'stretch'
@@ -71,13 +78,3 @@ export const TestSheet = StyleSheet.create({
         backgroundColor: 'rgb(220,220,200)'
     }
 });
-
-
-
-
-
-
-// export {
-//     height as ScreenHeight,
-//     width as ScreenWidth,
-// }
