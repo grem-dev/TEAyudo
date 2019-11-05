@@ -2,22 +2,13 @@
 import React, { Component } from 'react';
 
 import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
-
-import {
   Router,
   Stack,
   Scene
 } from 'react-native-router-flux';
 
 
-import Home from './app/view/Home';
+import Menu from './app/view/Menu';
 import { OperationsView , MatchView} from './app/view/Playground';
 import MainView,{ ConfigView } from './app/view/Main';
 
@@ -30,14 +21,12 @@ export default class App extends Component {
     }
   }
 
-
-
   render() {
     return (
       <Router>
         <Stack key="root">
           <Scene default key="main" component={MainView} hideNavBar />
-          <Scene key="activities" component={Home} title="Actividades" />
+          <Scene key="activities" component={Menu} title="Actividades" />
           <Scene key="operations" component={OperationsView} title="Operaciones" />
           <Scene key="match" component={MatchView} title="Pareja" />
         </Stack>

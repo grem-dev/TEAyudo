@@ -66,9 +66,8 @@ export default class MainView extends Component {
 		super(props)
 
 		this.state = {
-			elevation: new Animated.Value(15),
 			scale: new Animated.Value(1),
-			isAnimated: false,
+			isAnimated: true,
 		}
 	}
 
@@ -76,32 +75,30 @@ export default class MainView extends Component {
 
 	componentDidMount = () => {
 
+		// Start the animations
+		setTimeout(() => this.animatedPopup(), 1000);
 
-		setInterval(() => {
-			if (this.state.isAnimated === false)
-				this.animatedPopup();
-		}, 1000);
 
 	}
 
 
-	animatedPopup = async () => {
-		console.log('Me llamaron')
+	animatedPopup = () => {
 
-		this.state.isAnimated = true;
 
-		await Animated.sequence([
+		Animated.sequence([
+
 			Animated.spring(
 				this.state.scale,
-				{ toValue: 1.2, mass: 15 }
+				{ toValue: 1.1, mass: 10 }
 			),
 			Animated.spring(
 				this.state.scale,
-				{ toValue: 1, mass: 8 }
+				{ toValue: 1.09, mass: 20 }
 			)
+
 		]).start(() => {
-			this.state.isAnimated = false;
-			console.log('terminé la aniacion 4')
+			if (this.state.isAnimated)
+				this.animatedPopup();
 		});
 
 
@@ -114,9 +111,9 @@ export default class MainView extends Component {
 
 	render() {
 
-		let { elevation, scale } = this.state;
+		let { scale } = this.state;
 		let animatedStyle = {
-			elevation,
+
 			transform: [
 				{ scale },
 			]
@@ -124,14 +121,7 @@ export default class MainView extends Component {
 
 
 		return (
-
-
 			<View style={{ width: '100%', height: '100%', }}>
-
-				<View style={{ position: 'absolute', width: '100%', height: 40, backgroundColor: 'red' }}>
-					{/* Here will be an icon*/}
-				</View>
-
 				<View style={[localSheet.absoluteFill, { alignItems: 'center', justifyContent: 'center' }]}>
 					<Animated.View
 						style={[localSheet.btnPlay, animatedStyle]}
@@ -144,9 +134,6 @@ export default class MainView extends Component {
 						</TouchableOpacity>
 					</Animated.View>
 				</View>
-
-
-
 
 			</View>
 		)

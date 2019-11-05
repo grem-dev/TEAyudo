@@ -22,7 +22,7 @@ import {
 
 // Importhig local components
 import { Option, ValueContainer, Draggable } from '../components/InteractableComponents';
-import { OptionMenu } from '../components/MenuComponents';
+
 import { GenerateOperation } from '../controllers/randomMats';
 
 
@@ -46,10 +46,13 @@ const localSheet = StyleSheet.create({
 		bottom: 0,
 	},
 	menuOption: {
-		flex: 1, backgroundColor: 'white',
-		elevation: 5, borderRadius: 3, margin: 4, justifyContent: 'center',
-		alignItems: 'center', minHeight: 100, flexDirection: 'row'
-	}
+		alignItems: 'center', justifyContent: 'center',
+		width: '47.5%', height: '44%', margin: 5,
+
+		borderRadius: 5, backgroundColor: 'rgb(255,255,255)',
+		elevation: 2,
+	},
+
 
 });
 
@@ -65,11 +68,10 @@ export class OperationsView extends Component {
 			time: this.props.time,
 		};
 
-		console.log(this.state.time)
 	}
 
 
-	componentWillReceiveProps = () => {
+	getDerivedStateFromProps = () => {
 		this.setState({
 			operation: new GenerateOperation(this.props.level),
 			level: this.props.level,
@@ -112,6 +114,7 @@ export class OperationsView extends Component {
 	addOperationElements = (items) => {
 
 		let output = items.map(element => {
+
 			return <ValueContainer valueSize={50} value={element} />
 		});
 
@@ -139,6 +142,21 @@ export class OperationsView extends Component {
 	}
 
 
+
+	_insertOptions = () => {
+
+		let { options } = this.state.operation;
+
+		let output = options.map((item) => {
+			return this.renderItemMenu(item);
+		});
+
+		return output;
+	}
+
+
+
+
 	/**
 	 * Render the items of the falt list wich is the option menu
 	 */
@@ -155,7 +173,6 @@ export class OperationsView extends Component {
 	}
 
 	render() {
-		let { options } = this.state.operation;
 
 		return (
 			<View style={localSheet.absoluteFill}>
@@ -163,15 +180,8 @@ export class OperationsView extends Component {
 				<View style={[{ flex: 2 }]}>
 					{this.insertOperation()}
 				</View>
-				<View style={[{ flex: 1 }]}>
-					<FlatList
-						numColumns={2}
-						data={options}
-						renderItem={({ item }) => {
-							return this.renderItemMenu(item);
-						}}
-
-					/>
+				<View style={[{ flex: 1, flexWrap: 'wrap', alignItems: 'flex-start' }]}>
+					{this._insertOptions()}
 				</View>
 
 			</View>
@@ -196,8 +206,6 @@ export class MatchView extends Component {
 
 
 
-
-
 	/**
 	 * You know the function of this xD
 	 */
@@ -208,7 +216,7 @@ export class MatchView extends Component {
 				<View style={[{ flex: 1 }, TestSheet.red]}>
 
 				</View>
-				<View style={[{ flex: 3, alignItems: 'center', justifyContent: 'center'}, TestSheet.green]}>
+				<View style={[{ flex: 3, alignItems: 'center', justifyContent: 'center' }, TestSheet.green]}>
 					<Draggable />
 				</View>
 				<View style={[{ flex: 1 }, TestSheet.yellow]}>

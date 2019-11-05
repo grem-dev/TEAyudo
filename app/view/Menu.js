@@ -19,7 +19,6 @@ import {
 
 import { Actions } from 'react-native-router-flux';
 
-import { GenerateOperation } from '../controllers/randomMats'
 
 import { Card } from '../components/MenuComponents';
 
@@ -27,7 +26,7 @@ import { Card } from '../components/MenuComponents';
 
 
 
-export default class Home extends Component {
+export default class Menu extends Component {
 
 
 	constructor(props) {
@@ -45,6 +44,8 @@ export default class Home extends Component {
 
 	renderItem = (item) => <Card data={item} />
 
+
+
 	render() {
 		return (
 			<View>
@@ -53,6 +54,7 @@ export default class Home extends Component {
 					data={this.state.options}
 					numColumns={1}
 					renderItem={({ item }) => this.renderItem(item)}
+					keyExtractor={(item, index) => index.toString()}
 				/>
 			</View>
 		);
