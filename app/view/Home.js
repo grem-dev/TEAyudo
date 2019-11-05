@@ -29,15 +29,15 @@ import { Card } from '../components/MenuComponents';
 
 export default class Home extends Component {
 
-	
+
 	constructor(props) {
 		super(props);
 		this.state = {
 			options: [
-				{ title: "Operaciones", description: "Acomoda las piezas", action: () => Actions.operations({ level: 1, time:1}) },
-				{ title: "Par de letras", description: "Busca el par de cada letra" },
-				{ title: "Par de letras", description: "Busca el par de cada letra" },
-				{ title: "Pares de numeros", description: "Busca el par de cada numero" }
+				{ title: "Operaciones", description: "Acomoda las piezas", action: () => Actions.operations({ level: 1, time: 1 }) },
+				{ title: "Par de letras", description: "Busca el par de cada letra", action: () => Actions.match() },
+				{ title: "Pares de numeros", description: "Busca el par de cada numero" },
+				{ title: "Free", description: "Busca el par de cada letra" },
 			],
 		};
 	}

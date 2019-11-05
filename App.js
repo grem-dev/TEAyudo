@@ -18,7 +18,7 @@ import {
 
 
 import Home from './app/view/Home';
-import { OperationsView } from './app/view/Playground';
+import { OperationsView , MatchView} from './app/view/Playground';
 import MainView,{ ConfigView } from './app/view/Main';
 
 
@@ -39,6 +39,7 @@ export default class App extends Component {
           <Scene default key="main" component={MainView} hideNavBar />
           <Scene key="activities" component={Home} title="Actividades" />
           <Scene key="operations" component={OperationsView} title="Operaciones" />
+          <Scene key="match" component={MatchView} title="Pareja" />
         </Stack>
       </Router>
     );

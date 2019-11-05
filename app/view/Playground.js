@@ -21,7 +21,7 @@ import {
 
 
 // Importhig local components
-import { Option, ValueContainer } from '../components/InteractableComponents';
+import { Option, ValueContainer, Draggable } from '../components/InteractableComponents';
 import { OptionMenu } from '../components/MenuComponents';
 import { GenerateOperation } from '../controllers/randomMats';
 
@@ -80,23 +80,23 @@ export class OperationsView extends Component {
 
 	}
 
-
+	/**
+	 * Make tha comparison between the number given and the response of the current operation
+	 */
 	makeOperation = (value) => {
 
 		let { result } = this.state.operation;
 
 		if (value === result) {
 
-			let newTime = this.props.time;
-			newTime++;
+			let newTime = this.props.time + 1;
 			let newLevel = this.props.level;
 
 			if (newTime > 7) {
 				newTime = 1;
 				newLevel = this.state.level + 1;
 			}
-			console.log('Time: ', newTime)
-			console.log(newLevel)
+
 			Actions.refresh({ level: newLevel, time: newTime });
 			return true;
 
@@ -184,7 +184,7 @@ export class OperationsView extends Component {
 
 
 
-export class MatchperView extends Component {
+export class MatchView extends Component {
 
 	constructor(props) {
 		super(props);
@@ -192,12 +192,29 @@ export class MatchperView extends Component {
 		}
 	}
 
+
+
+
+
+
+
+	/**
+	 * You know the function of this xD
+	 */
 	render() {
 		return (
-			<View>
-				<Text>
-					Aquí debería ir algo importante
-				</Text>
+			<View style={localSheet.absoluteFill}>
+
+				<View style={[{ flex: 1 }, TestSheet.red]}>
+
+				</View>
+				<View style={[{ flex: 3, alignItems: 'center', justifyContent: 'center'}, TestSheet.green]}>
+					<Draggable />
+				</View>
+				<View style={[{ flex: 1 }, TestSheet.yellow]}>
+
+				</View>
+
 			</View>
 		);
 	}
