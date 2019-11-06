@@ -252,10 +252,12 @@ export class Draggable extends Component {
 				{ scale },
 			]
 		}
-		let img = '../src/images/' + this.state.img + '.png';
+
+
+
 		return (
 			<Animated.View
-				style={[dragStyles, { width, height }, localSheet.dragElement]}
+				style={[dragStyles, { width, height, zIndex: 100 }, localSheet.dragElement]}
 				{...this._panResponder.panHandlers}
 			>
 				{/* <Image

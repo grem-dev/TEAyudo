@@ -49,7 +49,7 @@ export function GenerateOperation<operation>(level) {
 
     options[Math.floor(Math.random() * 3)] = result;
 
-    return { first, second, flag, operator, result, options };
+    return { first, second, operator, result, options };
 }
 
 
@@ -58,4 +58,5 @@ interface operation {
     second: number;
     operator: string;
     result: number;
+    options:number[];
 }

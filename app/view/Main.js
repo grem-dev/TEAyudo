@@ -59,8 +59,6 @@ const localSheet = StyleSheet.create({
 
 
 
-
-
 export default class MainView extends Component {
 	constructor(props) {
 		super(props)
@@ -78,12 +76,13 @@ export default class MainView extends Component {
 		// Start the animations
 		setTimeout(() => this.animatedPopup(), 1000);
 
+		console.log('The component did mount')
 
 	}
 
 
 	animatedPopup = () => {
-
+		console.log('I was called 2')
 
 		Animated.sequence([
 
@@ -93,12 +92,14 @@ export default class MainView extends Component {
 			),
 			Animated.spring(
 				this.state.scale,
-				{ toValue: 1.09, mass: 20 }
+				{ toValue: 1, mass: 1 }
 			)
 
 		]).start(() => {
-			if (this.state.isAnimated)
+			if (this.state.isAnimated) {
 				this.animatedPopup();
+				console.log('Fui llamado de retorno')
+			}
 		});
 
 
@@ -139,6 +140,8 @@ export default class MainView extends Component {
 		)
 	}
 }
+
+
 
 export class ConfigView extends Component {
 	render() {

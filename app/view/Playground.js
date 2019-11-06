@@ -70,17 +70,15 @@ export class OperationsView extends Component {
 
 	}
 
-
-	getDerivedStateFromProps = () => {
+	UNSAFE_componentWillReceiveProps() {
 		this.setState({
 			operation: new GenerateOperation(this.props.level),
 			level: this.props.level,
 			time: this.props.time,
 		});
-
-		// console.log('Nuevos datos: time is: ', this.props.time)
-
 	}
+
+
 
 	/**
 	 * Make tha comparison between the number given and the response of the current operation
@@ -159,6 +157,7 @@ export class OperationsView extends Component {
 
 	/**
 	 * Render the items of the falt list wich is the option menu
+	 * @Retrun JXR.Element with the value given
 	 */
 	renderItemMenu = (item) => {
 
