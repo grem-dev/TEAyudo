@@ -1,8 +1,13 @@
-import React, { Component } from 'react'
+
+
+import React, {
+	Component
+} from 'react';
+
 import {
 	Text, View, StyleSheet,
 	Animated, TouchableOpacity,
-	PanResponder,
+	PanResponder, Image
 } from 'react-native';
 
 import { TestSheet, LayoutSheet } from '../view/css/layout';
@@ -57,7 +62,7 @@ export class Option extends Component {
 
 	}
 
-	componentWillReceiveProps = () => {
+	UNSAFE_componentWillReceiveProps = () => {
 
 		this.setState({
 			value: this.props.value,
@@ -113,7 +118,7 @@ export class ValueContainer extends Component {
 
 
 
-	componentWillReceiveProps = () => {
+	UNSAFE_componentWillReceiveProps = () => {
 		this.animateStart();
 	}
 
@@ -156,32 +161,28 @@ export class ValueContainer extends Component {
 export class Draggable extends Component {
 
 	constructor(props) {
-		super(props)
+		super(props);
 
 		this.state = {
 			isOnPlace: false,
 			pan: new Animated.ValueXY(),
 			scale: new Animated.Value(1),
-			imageURI: this.props.imgURI,
-		}
-	} // End of the Constructor
+			imageURI: this.props.imgURI ? this.props.imgURI : require('../resources/img/b.png'),
+		};
 
-	UNSAFE_componentWillMount() {
 
 		this._panResponder = PanResponder.create({
-
 			onMoveShouldSetResponderCapture: () => true,
-			onMoveShouldSetPanResponderCapture: () => !this.isOnPlace,
+			onMoveShouldSetPanResponderCapture: () => true,
 
 			//  Is called when the PanGesture Start to respond
 			onPanResponderGrant: (e, gestureState) => {
 				this.state.pan.setOffset({ x: this.state.pan.x._value, y: this.state.pan.y._value });
 				this.state.pan.setValue({ x: 0, y: 0 });
 
-
 				Animated.spring(
 					this.state.scale,
-					{ toValue: 1.1, friction: 3 }
+					{ toValue: 1.5, friction: 30 }
 				).start();
 
 			},
@@ -199,28 +200,34 @@ export class Draggable extends Component {
 
 				// For now this compoene only return the component to the origina position|
 
-				
+				console.log(gestureState.moveY)
+
+
 				Animated.spring(
 					this.state.pan,
-					{ toValue: { x: 0, y: 0, } }
+					{ toValue: { x: 0, y: 0, }, speed: 3 }
 				).start();
 
 				// Animaciones por clasificar
 				Animated.spring(
 					this.state.scale,
-					{ toValue: 1 }
+					{ toValue: 1, friction: 50 }
 				).start();
 
 			}
 
-		})
-	} // End of the WillMount method
+		});
+	} // End of the Constructor
+
+
+
+
 
 	isDropZone = (transform) => {
 		let target = this.props.dropTarget();
 
-		console.warn('Target position: ', target)
-		console.warn('My position: ', transform.moveX, ' : ', transform.moveY);
+		console.log('Target position: ', target)
+		console.log('My position: ', transform.moveX, ' : ', transform.moveY);
 
 		if (
 			transform.moveX > target.x - 30
@@ -260,10 +267,10 @@ export class Draggable extends Component {
 				style={[dragStyles, { width, height, zIndex: 100 }, localSheet.dragElement]}
 				{...this._panResponder.panHandlers}
 			>
-				{/* <Image
-					source={require('../resources/img/c.png')}
-					style={{ width, height }}
-				/> */}
+				<Image
+					source={img}
+					style={{ width, height, flex: 1 }}
+				/>
 			</Animated.View>
 		)
 	}
