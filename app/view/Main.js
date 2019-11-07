@@ -73,7 +73,7 @@ export default class MainView extends Component {
 
 
 
-	componentDidMount = () => {
+	UNSAFE_componentDidMount = () => {
 
 		// Start the animations
 		setTimeout(() => this.animatedPopup(), 1000);

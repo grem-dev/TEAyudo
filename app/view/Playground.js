@@ -11,7 +11,6 @@ import {
 	StyleSheet,
 	Text,
 	View,
-	FlatList,
 	TouchableOpacity
 } from 'react-native';
 
@@ -19,9 +18,12 @@ import {
 	Actions
 } from 'react-native-router-flux';
 
+import Icon from 'react-native-vector-icons/AntDesign';
+
 
 // Importhig local components
 import { Option, ValueContainer, Draggable } from '../components/InteractableComponents';
+import { AnimatedIcon } from '../components/AnimatedComponents';
 
 import { GenerateOperation } from '../controllers/randomMats';
 
@@ -33,7 +35,11 @@ import {
 } from './css/layout';
 
 
-const APPCOLOR = 'rgb(245,245,255)';
+
+
+const SCREEN_HEIGHT = Dimensions.get('window').height;
+const SCREEN_WIDTH = Dimensions.get('window').width;
+const APPCOLOR = 'rgb(50,50,170)';
 
 
 const localSheet = StyleSheet.create({
@@ -57,6 +63,7 @@ const localSheet = StyleSheet.create({
 });
 
 
+
 export class OperationsView extends Component {
 
 	constructor(props) {
@@ -71,16 +78,15 @@ export class OperationsView extends Component {
 	}
 
 
-	getDerivedStateFromProps = () => {
+	UNSAFE_componentWillReceiveProps = () => {
 		this.setState({
 			operation: new GenerateOperation(this.props.level),
 			level: this.props.level,
 			time: this.props.time,
 		});
-
 		// console.log('Nuevos datos: time is: ', this.props.time)
-
 	}
+
 
 	/**
 	 * Make tha comparison between the number given and the response of the current operation
@@ -172,6 +178,9 @@ export class OperationsView extends Component {
 		);
 	}
 
+
+
+
 	render() {
 
 		return (
@@ -187,9 +196,9 @@ export class OperationsView extends Component {
 			</View>
 		);
 	}
+
+
 }
-
-
 
 
 
@@ -199,11 +208,29 @@ export class MatchView extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+
 		}
+
+		this.getRefer.bind(this);
+		this.arrows = [];
+	}
+
+	componentDidMount = () => {
+		// this.arrows.forEach(item => { 
+		// 	item.animateSlideUp()
+		// });
+		this.arrows[0].animateSlideUp(true);
+		this.arrows[1].animateSlideDown(true);
+	}
+
+	checkPositionDrag = () => {
+
 	}
 
 
-
+	getRefer = (object) => {
+		this.arrows.push(object);
+	}
 
 
 	/**
@@ -213,14 +240,26 @@ export class MatchView extends Component {
 		return (
 			<View style={localSheet.absoluteFill}>
 
-				<View style={[{ flex: 1 }, TestSheet.red]}>
+				<View style={[{ flex: 1, alignItems: 'center', justifyContent: 'center' }, TestSheet.red]}>
+
+					<View style={{ width: 50, height: 50, backgroundColor: 'red' }}>
+
+					</View>
 
 				</View>
-				<View style={[{ flex: 3, alignItems: 'center', justifyContent: 'center' }, TestSheet.green]}>
-					<Draggable />
-				</View>
-				<View style={[{ flex: 1 }, TestSheet.yellow]}>
+				{/*  ======================================================  */}
+				<View style={[{ flex: 3, zIndex: 100, alignItems: 'center', justifyContent: 'space-between' }]}>
 
+					<AnimatedIcon refer={this.getRefer} type="SlideUp" name='arrowup' size={50} color='rgba(255,255,255,0.5)' />
+					<Draggable upDrag={this.checkPositionDrag} imgURI={require('../resources/img/a.png')} />
+					<AnimatedIcon refer={this.getRefer} type="SlideDown" name='arrowdown' size={50} color='rgba(255,255,255,0.5)' />
+
+				</View>
+				{/*  ======================================================  */}
+				<View style={[{ flex: 1, zIndex: 1, alignItems: 'center', justifyContent: 'center' }, TestSheet.yellow]}>
+					<View style={{ width: 50, height: 50, backgroundColor: 'red' }}>
+
+					</View>
 				</View>
 
 			</View>

@@ -6,7 +6,6 @@ import {
 	View,
 	Text,
 	StyleSheet,
-	FlatList,
 	TouchableOpacity,
 } from 'react-native';
 
@@ -16,7 +15,7 @@ export class Card extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			fillHeight: 100,
+			fillHeight: 20,
 		};
 	}
 
@@ -27,6 +26,7 @@ export class Card extends Component {
 
 		return (
 			<TouchableOpacity
+				key={() => this.props.key}
 				onLongPress={() => {
 					console.warn('LongPress');
 				}}
@@ -48,7 +48,14 @@ export class Card extends Component {
 
 
 
+
+
+/**
+ * This component is not in use jet.
+ */
 export class OptionMenu extends Component {
+
+
 	constructor(props) {
 		super(props)
 
@@ -60,13 +67,22 @@ export class OptionMenu extends Component {
 	}
 
 
-	componentWillReceiveProps = () => {
+	/** 
+	* Just for testing now
+	* it will test if the element should reder
+	*/
+	UNSAFE_componentWillReceiveProps = () => {
 		console.log('new props is comming');
 	}
 
+
+
+	/**
+	 * @Parameters item : JSX.Text into the element returned
+	 * 
+	 * @Return an JSX.Element 
+	 */
 	renderItemMenu = (item) => {
-
-
 
 		return (
 			<TouchableOpacity
@@ -83,7 +99,7 @@ export class OptionMenu extends Component {
 		console.log(this.state.options)
 
 		return (
-		<View></View>
+			<View></View>
 		);
 	}
 

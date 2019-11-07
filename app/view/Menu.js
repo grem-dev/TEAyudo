@@ -33,16 +33,16 @@ export default class Menu extends Component {
 		super(props);
 		this.state = {
 			options: [
-				{ title: "Operaciones", description: "Acomoda las piezas", action: () => Actions.operations({ level: 1, time: 1 }) },
-				{ title: "Par de letras", description: "Busca el par de cada letra", action: () => Actions.match() },
-				{ title: "Pares de numeros", description: "Busca el par de cada numero" },
-				{ title: "Free", description: "Busca el par de cada letra" },
+				{ title: "Operaciones", description: "Acomoda las piezas - Aquí debe ir una imagen o no sé que quiera la banda", action: () => Actions.operations({ level: 1, time: 1 }) },
+				{ title: "Par de letras", description: "Busca el par de cada letra - Aquí debe ir una imagen o no sé que quiera la banda", action: () => Actions.match() },
+				{ title: "Pares de numeros", description: "Busca el par de cada numero - Aquí debe ir una imagen o no sé que quiera la banda" },
+				{ title: "Free", description: "Busca el par de cada letra - Aquí debe ir una imagen o no sé que quiera la banda" },
 			],
 		};
 	}
 
 
-	renderItem = (item) => <Card data={item} />
+	renderItem = (item,key) => <Card data={item} key={key} />
 
 
 
@@ -53,12 +53,12 @@ export default class Menu extends Component {
 					style={localSheet.container}
 					data={this.state.options}
 					numColumns={1}
-					renderItem={({ item }) => this.renderItem(item)}
+					renderItem={({ item, key }) => this.renderItem(item,key)}
 					keyExtractor={(item, index) => index.toString()}
 				/>
 			</View>
 		);
-	}
+	} // End of the render method
 }
 
 
