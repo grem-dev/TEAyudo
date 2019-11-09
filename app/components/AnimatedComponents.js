@@ -19,7 +19,7 @@ export class AnimatedIcon extends Component {
 
 	componentDidMount = () => {
 		this.props.refer(this)
-		// switch (this.props.type) { 
+		// switch (this.props.type) {
 		// 	case "SlideUp":
 		// 		this.animateSlideUp()
 		// 		break;
@@ -29,7 +29,7 @@ export class AnimatedIcon extends Component {
 		// 	default:
 		// 		console.log('pos no fue nada');
 		// 		break;
-		// }
+		//
 
 	}
 
@@ -58,7 +58,7 @@ export class AnimatedIcon extends Component {
 				}
 			)
 		]).start(() => {
-			if(cicle === true)
+			if (cicle === true)
 				this.animateSlideUp(cicle)
 		});
 

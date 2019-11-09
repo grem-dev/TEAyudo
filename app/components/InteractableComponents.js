@@ -251,6 +251,7 @@ export class Draggable extends Component {
 		let translateX = pan.x;
 		let translateY = pan.y;
 		let rotate = '0deg';
+
 		let dragStyles = {
 			transform: [
 				{ translateX },
@@ -260,16 +261,16 @@ export class Draggable extends Component {
 			]
 		}
 
-
+		let img = this.props.imgURI;
 
 		return (
 			<Animated.View
-				style={[dragStyles, { width, height, zIndex: 100 }, localSheet.dragElement]}
+				style={[dragStyles, { width, height, justifyContent: 'center', alignItems: 'center' }]}
 				{...this._panResponder.panHandlers}
 			>
 				<Image
 					source={img}
-					style={{ width, height, flex: 1 }}
+					style={{ resizeMode: 'contain', flex: 1 }}
 				/>
 			</Animated.View>
 		)

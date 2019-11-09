@@ -11,6 +11,7 @@ import {
 	StyleSheet,
 	Text,
 	View,
+	Image,
 	TouchableOpacity
 } from 'react-native';
 
@@ -77,25 +78,17 @@ export class OperationsView extends Component {
 
 	}
 
-<<<<<<< HEAD
-	UNSAFE_componentWillReceiveProps() {
-=======
+
 
 	UNSAFE_componentWillReceiveProps = () => {
->>>>>>> aa868ee3d235489704374d3e6b281e9766676c5d
+
 		this.setState({
 			operation: new GenerateOperation(this.props.level),
 			level: this.props.level,
 			time: this.props.time,
 		});
-<<<<<<< HEAD
-	}
-
-
-=======
 		// console.log('Nuevos datos: time is: ', this.props.time)
 	}
->>>>>>> aa868ee3d235489704374d3e6b281e9766676c5d
 
 
 	/**
@@ -262,7 +255,7 @@ export class MatchView extends Component {
 				<View style={[{ flex: 3, zIndex: 100, alignItems: 'center', justifyContent: 'space-between' }]}>
 
 					<AnimatedIcon refer={this.getRefer} type="SlideUp" name='arrowup' size={50} color='rgba(255,255,255,0.5)' />
-					<Draggable upDrag={this.checkPositionDrag} imgURI={require('../resources/img/a.png')} />
+					<Draggable upDrag={this.checkPositionDrag} imgURI={require('../resources/img/c.png')} />
 					<AnimatedIcon refer={this.getRefer} type="SlideDown" name='arrowdown' size={50} color='rgba(255,255,255,0.5)' />
 
 				</View>

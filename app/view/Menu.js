@@ -42,15 +42,7 @@ export default class Menu extends Component {
 	}
 
 
-<<<<<<< HEAD
-	static getDerivedStateFromProps(props){
-		console.log('Not error here')
-	}
-
-	renderItem = (item) => <Card data={item} />
-=======
 	renderItem = (item,key) => <Card data={item} key={key} />
->>>>>>> aa868ee3d235489704374d3e6b281e9766676c5d
 
 
 
