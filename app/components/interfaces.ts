@@ -4,7 +4,7 @@ class AnimatedIconBase<AnimatedIconProps>{
 
 }
 
-interface AnimatedIconProps { 
+interface AnimatedIconProps {
 
 	size: number,
 	name: string,

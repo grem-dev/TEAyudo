@@ -128,7 +128,7 @@ export default class MainView extends Component {
 						style={[localSheet.btnPlay, animatedStyle]}
 					>
 						<TouchableOpacity
-							onPress={() => { this._handlePress() }}
+							onPress={() => { this.props.navigaton.navigate('Menu'); }}
 							style={localSheet.fillAndCenter}
 						>
 							<Text style={localSheet.text}>Ir</Text>

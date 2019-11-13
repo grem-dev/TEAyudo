@@ -14,6 +14,7 @@ import { TestSheet, LayoutSheet } from '../view/css/layout';
 
 
 
+
 const localSheet = StyleSheet.create({
 	card: {
 		borderRadius: 15,
@@ -167,8 +168,10 @@ export class Draggable extends Component {
 			isOnPlace: false,
 			pan: new Animated.ValueXY(),
 			scale: new Animated.Value(1),
-			imageURI: this.props.imgURI ? this.props.imgURI : require('../resources/img/b.png'),
+			img: this.props.image ? this.props.image : require('../resources/img/c.png'),
 		};
+
+
 
 
 		this._panResponder = PanResponder.create({
@@ -200,7 +203,7 @@ export class Draggable extends Component {
 
 				// For now this compoene only return the component to the origina position|
 
-				console.log(gestureState.moveY)
+				let result = this.props.onLeaveDrag({ posY: gestureState.moveY })
 
 
 				Animated.spring(
@@ -220,7 +223,11 @@ export class Draggable extends Component {
 	} // End of the Constructor
 
 
-
+	componentWillReceiveProps = () => {
+		this.setState({
+			img: this.props.image ? this.props.image : require('../resources/img/c.png'),
+		});
+	}
 
 
 	isDropZone = (transform) => {
@@ -244,8 +251,8 @@ export class Draggable extends Component {
 
 
 	render() {
-		let width = 50;
-		let height = 50;
+		let width = this.props.size;
+		let height = this.props.size;
 
 		let { pan, scale } = this.state;
 		let translateX = pan.x;
@@ -261,7 +268,6 @@ export class Draggable extends Component {
 			]
 		}
 
-		let img = this.props.imgURI;
 
 		return (
 			<Animated.View
@@ -269,7 +275,7 @@ export class Draggable extends Component {
 				{...this._panResponder.panHandlers}
 			>
 				<Image
-					source={img}
+					source={this.state.img}
 					style={{ resizeMode: 'contain', flex: 1 }}
 				/>
 			</Animated.View>

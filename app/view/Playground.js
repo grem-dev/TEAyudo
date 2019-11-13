@@ -26,7 +26,12 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import { Option, ValueContainer, Draggable } from '../components/InteractableComponents';
 import { AnimatedIcon } from '../components/AnimatedComponents';
 
-import { GenerateOperation } from '../controllers/randomMats';
+import { GenerateOperation, RandomWords } from '../controllers/randomMats';
+
+
+// Importing from resources
+import { words } from '../resources/resourcesLoad';
+
 
 
 //  Importhing StyleSheets
@@ -59,6 +64,9 @@ const localSheet = StyleSheet.create({
 		borderRadius: 5, backgroundColor: 'rgb(255,255,255)',
 		elevation: 2,
 	},
+	centerItems: {
+		alignItems: 'center', justifyContent: 'center',
+	}
 
 
 });
@@ -209,26 +217,88 @@ export class OperationsView extends Component {
 
 export class MatchView extends Component {
 
+	navBarHeight = 60;
+
+
 	constructor(props) {
 		super(props);
 		this.state = {
-
+			primaryWord: RandomWords.generateRandomWord(),
+			secondaryWord: "",
+			optionPlaced: Math.round(Math.random()),
+			step: this.props.step,
 		}
 
-		this.getRefer.bind(this);
+		this.state.secondaryWord = RandomWords.generateRandomWord(this.state.primaryWord);
+
 		this.arrows = [];
 	}
 
 	componentDidMount = () => {
-		// this.arrows.forEach(item => { 
+		// this.arrows.forEach(item => {
 		// 	item.animateSlideUp()
 		// });
 		this.arrows[0].animateSlideUp(true);
 		this.arrows[1].animateSlideDown(true);
+
+		// console.log('The random value is: ', this.state.optionPlaced)
+		console.log('The screen size is: ', SCREEN_HEIGHT)
 	}
 
-	checkPositionDrag = () => {
+	componentWillReceiveProps = () => {
 
+		let { secondaryWord, primaryWord, step, optionPlaced } = this.props;
+
+		this.setState({
+			step,
+			primaryWord,
+			secondaryWord,
+			optionPlaced
+		});
+
+
+	}
+
+	_optionCorrect = () => {
+		if (Math.round(Math.random()) == 1) {
+			Actions.refresh({
+				key: 'couples', step: this.props.step + 1,
+				primaryWord: this.state.primaryWord,
+				secondaryWord: RandomWords.generateRandomWord(this.state.primaryWord),
+				optionPlaced: 1
+			});
+		} else {
+			Actions.refresh({
+				key: 'couples', step: this.props.step + 1,
+				primaryWord: RandomWords.generateRandomWord(this.state.primaryWord),
+				secondaryWord: this.state.primaryWord,
+				optionPlaced: 0
+			});
+		}
+	}
+
+
+	checkPositionDrag = ({ posY }) => {
+		if (posY < (SCREEN_HEIGHT * 0.20) + this.navBarHeight) {
+
+
+			if (this.state.optionPlaced == 1) {
+				this._optionCorrect(1);
+			} else {
+				console.log('Option incorrect, do something')
+			}
+
+		} else if (posY > (SCREEN_HEIGHT * 0.80)) {
+
+			if (this.state.optionPlaced == 0) {
+				this._optionCorrect(0);
+			} else {
+				console.log('Option incorrect, do something')
+			}
+			// Actions.refresh({ key: 'couples', step: this.props.step + 1, random: Math.random() });
+		} else {
+			console.warn('Para ningún lado');
+		}
 	}
 
 
@@ -237,32 +307,61 @@ export class MatchView extends Component {
 	}
 
 
+
+	insertOption = (pos) => {
+
+
+		if (this.state.optionPlaced == pos) {
+
+			let aux = this.state.primaryWord.toLocaleLowerCase() + '_whitefill';
+			letter = (aux in words) ? words[aux] : words.c;
+			// console.log('The primary was added: ', aux)
+		} else {
+			let aux = this.state.secondaryWord.toLocaleLowerCase() + '_whitefill';
+			letter = (aux in words) ? words[aux] : words.c;
+			// console.log('The secondary was added: ', aux)
+		}
+
+		return (
+			// Here will be an animated componen imporrted from components folder
+			<Image style={{ resizeMode: 'contain', flex: 1 }} source={letter} />
+		);
+	}
+
 	/**
 	 * You know the function of this xD
 	 */
 	render() {
+
+
+
+
+
 		return (
 			<View style={localSheet.absoluteFill}>
+				<View style={{ backgroundColor: 'green', height: this.navBarHeight, width: '100%' }}>
+					<Text>Algo para rellear</Text>
+				</View>
 
-				<View style={[{ flex: 1, alignItems: 'center', justifyContent: 'center' }, TestSheet.red]}>
+				<View style={[{ flex: 1 }, localSheet.centerItems]}>
 
-					<View style={{ width: 50, height: 50, backgroundColor: 'red' }}>
-
+					<View style={[{ width: 75, height: 75 }, localSheet.centerItems]}>
+						{this.insertOption(1)}
 					</View>
 
 				</View>
 				{/*  ======================================================  */}
-				<View style={[{ flex: 3, zIndex: 100, alignItems: 'center', justifyContent: 'space-between' }]}>
+				<View style={[{ flex: 2, zIndex: 100, alignItems: 'center', justifyContent: 'space-between' }]}>
 
-					<AnimatedIcon refer={this.getRefer} type="SlideUp" name='arrowup' size={50} color='rgba(255,255,255,0.5)' />
-					<Draggable upDrag={this.checkPositionDrag} imgURI={require('../resources/img/c.png')} />
-					<AnimatedIcon refer={this.getRefer} type="SlideDown" name='arrowdown' size={50} color='rgba(255,255,255,0.5)' />
+					<AnimatedIcon refer={this.getRefer} type="SlideUp" name='arrowup' size={80} color='rgba(255,255,255,0.1)' />
+					<Draggable onLeaveDrag={this.checkPositionDrag} size={90} image={words[this.state.primaryWord.toLocaleLowerCase()]} />
+					<AnimatedIcon refer={this.getRefer} type="SlideDown" name='arrowdown' size={80} color='rgba(255,255,255,0.1)' />
 
 				</View>
 				{/*  ======================================================  */}
-				<View style={[{ flex: 1, zIndex: 1, alignItems: 'center', justifyContent: 'center' }, TestSheet.yellow]}>
-					<View style={{ width: 50, height: 50, backgroundColor: 'red' }}>
-
+				<View style={[{ flex: 1, zIndex: 1 }, localSheet.centerItems]}>
+					<View style={[{ width: 75, height: 75 }, localSheet.centerItems]}>
+						{this.insertOption(0)}
 					</View>
 				</View>
 

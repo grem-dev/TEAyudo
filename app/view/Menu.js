@@ -34,7 +34,7 @@ export default class Menu extends Component {
 		this.state = {
 			options: [
 				{ title: "Operaciones", description: "Acomoda las piezas - Aquí debe ir una imagen o no sé que quiera la banda", action: () => Actions.operations({ level: 1, time: 1 }) },
-				{ title: "Par de letras", description: "Busca el par de cada letra - Aquí debe ir una imagen o no sé que quiera la banda", action: () => Actions.match() },
+				{ title: "Par de letras", description: "Busca el par de cada letra - Aquí debe ir una imagen o no sé que quiera la banda", action: () => Actions.couples({step:1}) },
 				{ title: "Pares de numeros", description: "Busca el par de cada numero - Aquí debe ir una imagen o no sé que quiera la banda" },
 				{ title: "Free", description: "Busca el par de cada letra - Aquí debe ir una imagen o no sé que quiera la banda" },
 			],

@@ -7,10 +7,13 @@ import {
   Scene
 } from 'react-native-router-flux';
 
+// Navigator that will replace router flux
+import { createAppContainer } from '@react-navigation/native';
+import { createStackNavigator } from 'react-navigation-stack';
 
 import Menu from './app/view/Menu';
-import { OperationsView , MatchView} from './app/view/Playground';
-import MainView,{ ConfigView } from './app/view/Main';
+import { OperationsView, MatchView } from './app/view/Playground';
+import MainView, { ConfigView } from './app/view/Main';
 
 
 export default class App extends Component {
@@ -23,14 +26,15 @@ export default class App extends Component {
 
   render() {
     return (
-      <Router>
-        <Stack key="root">
-          <Scene default key="main" component={MainView} hideNavBar />
-          <Scene key="activities" component={Menu} title="Actividades" />
-          <Scene key="operations" component={OperationsView} title="Operaciones" />
-          <Scene key="match" component={MatchView} title="Pareja" />
-        </Stack>
-      </Router>
+      <StackNavigator />
     );
   }
 }
+
+const AppNavigator = createStackNavigator({
+  Home: {
+    screen: MainView,
+  },
+});
+
+StackNavigator = createAppContainer(AppNavigator);
