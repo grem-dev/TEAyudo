@@ -40,27 +40,28 @@ export class AnimatedIcon extends Component {
 
 		// console.log('fuí llamado')
 
-		Animated.sequence([
-			Animated.timing(
-				this.state.yPos,
-				{
-					toValue: -25,
-					duration: 1500,
-					easing: Easing.elastic(2.5)
-				}
-			),
-			Animated.timing(
-				this.state.yPos,
-				{
-					toValue: 0,
-					duration: 1000,
-					easing: Easing.elastic(1)
-				}
-			)
-		]).start(() => {
-			if(cicle === true)
-				this.animateSlideUp(cicle)
-		});
+		this.curretnAnimation = Animated.loop(
+			// Animation consists of a sequence of steps
+			Animated.sequence([
+				Animated.timing(
+					this.state.yPos,
+					{
+						toValue: -25,
+						duration: 1500,
+						easing: Easing.elastic(2.5)
+					}
+				),
+				Animated.timing(
+					this.state.yPos,
+					{
+						toValue: 0,
+						duration: 1000,
+						easing: Easing.elastic(1)
+					}
+				)
+			])
+		).start();
+
 
 	}
 
@@ -69,30 +70,28 @@ export class AnimatedIcon extends Component {
 	 */
 	animateSlideDown = (cicle = false) => {
 
-		console.log('fuí llamado')
 
-		Animated.sequence([
-			Animated.timing(
-				this.state.yPos,
-				{
-					toValue: 25,
-					duration: 1500,
-					easing: Easing.elastic(2.5)
-				}
-			),
-			Animated.timing(
-				this.state.yPos,
-				{
-					toValue: 0,
-					duration: 1000,
-					easing: Easing.elastic(1)
-				}
-			)
-		]).start(() => {
-			if (cicle === false)
-				return;
-			this.animateSlideDown(cicle)
-		});
+		this.curretnAnimation = Animated.loop(
+			// Animation consists of a sequence of steps
+			Animated.sequence([
+				Animated.timing(
+					this.state.yPos,
+					{
+						toValue: 25,
+						duration: 1500,
+						easing: Easing.elastic(2.5)
+					}
+				),
+				Animated.timing(
+					this.state.yPos,
+					{
+						toValue: 0,
+						duration: 1000,
+						easing: Easing.elastic(1)
+					}
+				)
+			])
+		).start();
 
 	}
 

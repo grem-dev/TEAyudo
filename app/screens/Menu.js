@@ -31,18 +31,25 @@ export default class MenuScreen extends Component {
         super(props);
         this.state = {
             options: [
-                { title: "Operaciones", description: "Acomoda las piezas - Aquí debe ir una imagen o no sé que quiera la banda", action: () => { } },
-                { title: "Par de letras", description: "Busca el par de cada letra - Aquí debe ir una imagen o no sé que quiera la banda", action: () => { } },
+                { title: "Operaciones", description: "Acomoda las piezas - Aquí debe ir una imagen o no sé que quiera la banda" },
+                { title: "Par de letras", description: "Busca el par de cada letra - Aquí debe ir una imagen o no sé que quiera la banda", toNavigate: "Couples" },
                 { title: "Pares de numeros", description: "Busca el par de cada numero - Aquí debe ir una imagen o no sé que quiera la banda" },
                 { title: "Free", description: "Busca el par de cada letra - Aquí debe ir una imagen o no sé que quiera la banda" },
             ],
         };
+
+        // console.log('The app props are this: ', this.props)
     }
 
 
-    renderItem = (item, key) => <Card data={item} key={key} />
+    renderItem = (item, key) => <Card navigation={this.props.navigation} data={item} key={key} />
 
-
+    // componentWillUnmount = () => {
+    //     console.log('Fui desmontado en menu')
+    // }
+    // componentWillUpdate = () => {
+    //     console.log('Me voy a actualizar en el menu')
+    // }
 
     render() {
         return (

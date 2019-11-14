@@ -11,6 +11,13 @@ import {
 
 
 
+
+
+import Icon from 'react-native-vector-icons/FontAwesome'
+
+
+
+
 export class Card extends Component {
 	constructor(props) {
 		super(props);
@@ -21,7 +28,7 @@ export class Card extends Component {
 
 	render() {
 
-		let { title, description, action } = this.props.data;
+		let { title, description, toNavigate } = this.props.data;
 		let height = (this.state.fillHeight / 3) * 2;
 
 		return (
@@ -35,7 +42,14 @@ export class Card extends Component {
 					this.setState({ fillHeight: layout.width });
 				}}
 				style={localSheet.container}
-				onPress={action}
+				onPress={() => {
+					if (toNavigate) {
+						this.props.navigation.navigate('Couples');
+						
+					} else {
+						console.warn('ToNavigate prop is missing')
+					}
+				}}
 			>
 				<Text style={localSheet.title}> {title} </Text>
 				<View style={[localSheet.img, { height }]}>

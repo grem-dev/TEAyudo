@@ -1,5 +1,5 @@
 
-
+import { words } from '../resources/resourcesLoad'
 
 
 /**
@@ -49,7 +49,7 @@ export function GenerateOperation<operation>(level) {
 
     options[Math.floor(Math.random() * 3)] = result;
 
-    return { first, second, flag, operator, result, options };
+    return { first, second, operator, result, options };
 }
 
 
@@ -58,39 +58,53 @@ interface operation {
     second: number;
     operator: string;
     result: number;
+    options: number[];
 }
 
 
-export class RandomChar {
-
-    static numbersArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
 
 
-    static chars = "ABCDEFGHIJKLMNÑOPQRSTXWYZ";
+export class RandomWords {
 
-    constructor() {
+    static auxWords = "HIJKLMNÑOPQRSTWXYZ";
 
+    static words = "ABCDEFG";
+    static numbers = "1234567890";
+
+    // Non implemented for now
+    static generateRandomNumber() {
+        return null;
     }
 
-    /**
-     * Generate one char among a chars array of the class
-     * @Return string, just a char
-    */
-    static generate() : string{
-
-
-        let randomChar = RandomChar.chars[Math.floor(Math.random() * RandomChar.chars.length)]
-
-        return randomChar;
-    }
 
     /**
-     * Compare two chars and 
-     * @Return boolean 
+     * Generate a random word ammong all the words of the classic keyboard
+     * @param current the current value, used for don't generate the same number
      */
+    static generateRandomWord(current?: string): string {
+
+
+        let output = RandomWords.words[Math.floor(Math.random() * RandomWords.words.length)];
+
+        if (current) {
+            while (output === current[0]) {
+                output = RandomWords.words[Math.floor(Math.random() * RandomWords.words.length)];
+            }
+        }
+
+
+        return output;
+    }
+
+	/**
+	 * Compare two parameter and return a bolear if the value is completly equal to the second patameters
+	 * @param a first leter what will be compare with b
+	 * @param b string [char] to be compare
+	 */
     static compare(a: string, b: string): boolean {
 
-        return (a[0] === b[0]) ? true : false;
+        return (a === b) ? true : false;
+
     }
 
 }
