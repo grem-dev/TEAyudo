@@ -23,8 +23,18 @@ import { createStackNavigator } from 'react-navigation-stack';
 
 /// Importing Screens
 import { SettingsScreen } from './app/screens/Main'
+import { ModalWinScreen, InformationModalScreen } from './app/screens/Modal'
 import MenuScreen from './app/screens/Menu';
-import { CouplesScreen } from './app/screens/Playground'
+import { CouplesScreen, OperationsScreen } from './app/screens/Playground'
+
+
+
+/// Importing styleSheet and Colors
+
+import { AppColors } from './app/settings/GlobalStyles'
+
+
+
 
 
 
@@ -43,16 +53,39 @@ export default class App extends Component {
 
 
 
+const MenuStackNavigator = createAppContainer(
+  createStackNavigator({
+    Menu: {
+      screen: MenuScreen,
+      navigationOptions: () => ({
+        header: null
+      }),
+    },
+    InformationModal: {
+      screen: InformationModalScreen,
+      navigationOptions: ({ navigation }) => ({
+        header: null,
+        modal: true
+      })
+    },
+
+  },
+    {
+      initialRouteName: 'Menu'
+    })
+);
+
 // This element will be introduced onto the Stack Navigator component above.
 const TabNavigator = createAppContainer(
   createMaterialBottomTabNavigator({
     Menu: {
-      screen: MenuScreen,
+      screen: MenuStackNavigator,
       navigationOptions: {
         tabBarLabel: 'Menú',
         tabBarIcon: ({ tintColor }) => (
           <Icon name="home" color={tintColor} size={24} />
-        )
+        ),
+
       }
     },
     Settings: {
@@ -61,15 +94,17 @@ const TabNavigator = createAppContainer(
         tabBarLabel: 'Ajustes',
         tabBarIcon: ({ tintColor }) => (
           <Icon name="gear" color={tintColor} size={24} />
-        )
+        ),
+
       }
     },
   }, {
     initialRouteName: 'Menu',
-    activeColor: 'rgba(15,15,140,1)',
+    activeColor: AppColors.secondary,
     inactiveColor: 'rgba(30,30,30,1)',
-      barStyle: { backgroundColor: 'white' },
+    barStyle: { backgroundColor: 'white', elevation: 15 },
     shifting: true,
+
   })
 );
 
@@ -87,7 +122,20 @@ const StackNavigator = createAppContainer(
       navigationOptions: () => ({
         title: 'couples'
       }),
-    }
+    },
+    Operations: {
+      screen: OperationsScreen,
+      navigationOptions: ({ navigation }) => ({
+        title: 'Operaciones',
+      })
+    },
+    ModalWin: {
+      screen: ModalWinScreen,
+      navigationOptions: () => ({
+        header: null,
+      }),
+    },
+
   })
 );
 

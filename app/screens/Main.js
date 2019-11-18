@@ -10,8 +10,10 @@ import {
 	Animated
 } from 'react-native';
 
+import { Header } from '../components/Header'
 
 
+import { AppColors } from '../settings/GlobalStyles'
 
 
 
@@ -56,6 +58,23 @@ const localSheet = StyleSheet.create({
 
 
 
+
+
+export class SettingsScreen extends Component {
+	render() {
+		return (
+			<View style={{ flex: 1, backgroundColor: AppColors.background }}>
+				<Header titleColor={AppColors.textOverColorLight} title='Ajustes' />
+			</View>
+		)
+	}
+}
+
+
+
+
+
+
 export default class MainView extends Component {
 	constructor(props) {
 		super(props)
@@ -76,7 +95,7 @@ export default class MainView extends Component {
 		console.log('Voy a ser montado')
 	}
 
-	componentWillUnmount() {
+	Unmount() {
 		// this.setState({
 		// 	isAnimated: false
 		// });
@@ -145,15 +164,5 @@ export default class MainView extends Component {
 }
 
 
-
-export class SettingsScreen extends Component {
-	render() {
-		return (
-			<View>
-				<Text> Configurations here </Text>
-			</View>
-		)
-	}
-}
 
 

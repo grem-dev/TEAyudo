@@ -14,14 +14,17 @@ import {
     View,
     Text,
     StyleSheet,
-    FlatList
+    FlatList,
+    ScrollView
 } from 'react-native';
 
 
-import { Card } from '../components/MenuComponents';
+import { MenuHorizontalScroll } from '../components/MenuComponents';
+import { Header } from '../components/Header';
 
+import { AppColors } from '../settings/GlobalStyles'
 
-
+import { Tree } from '../settings/MenuOptions'
 
 
 export default class MenuScreen extends Component {
@@ -30,37 +33,32 @@ export default class MenuScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            options: [
-                { title: "Operaciones", description: "Acomoda las piezas - Aquí debe ir una imagen o no sé que quiera la banda" },
-                { title: "Par de letras", description: "Busca el par de cada letra - Aquí debe ir una imagen o no sé que quiera la banda", toNavigate: "Couples" },
-                { title: "Pares de numeros", description: "Busca el par de cada numero - Aquí debe ir una imagen o no sé que quiera la banda" },
-                { title: "Free", description: "Busca el par de cada letra - Aquí debe ir una imagen o no sé que quiera la banda" },
-            ],
+            optionsMenu: Tree
         };
+    }
 
-        // console.log('The app props are this: ', this.props)
+    /**
+     * @Return an array of JSX:Elements
+     */
+    _insertItemsMenu = () => {
+
+        return this.state.optionsMenu.map((item) => {
+            return (
+                <MenuHorizontalScroll titleColor={AppColors.textOverColorLight} navigation={this.props.navigation} item={item} />
+            );
+        });
     }
 
 
-    renderItem = (item, key) => <Card navigation={this.props.navigation} data={item} key={key} />
-
-    // componentWillUnmount = () => {
-    //     console.log('Fui desmontado en menu')
-    // }
-    // componentWillUpdate = () => {
-    //     console.log('Me voy a actualizar en el menu')
-    // }
 
     render() {
         return (
-            <View>
-                <FlatList
-                    style={localSheet.container}
-                    data={this.state.options}
-                    numColumns={1}
-                    renderItem={({ item, key }) => this.renderItem(item, key)}
-                    keyExtractor={(item, index) => index.toString()}
-                />
+            <View style={{ backgroundColor: AppColors.background, flex: 1 }}>
+                <ScrollView style={{}} showsVerticalScrollIndicator={false} >
+                    <Header titleColor={AppColors.textOverColorLight} title="Menú" />
+                    {this._insertItemsMenu()}
+                </ScrollView>
+                {/* <Text onPress={() => { this.props.navigation.navigate('Couples', { step: 1 }) }}>asdad</Text> */}
             </View>
         );
     } // End of the render method
@@ -68,9 +66,4 @@ export default class MenuScreen extends Component {
 
 
 
-const localSheet = StyleSheet.create({
-    container: {
-        margin: 3,
 
-    }
-});

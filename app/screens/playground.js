@@ -12,7 +12,8 @@ import {
 	Text,
 	View,
 	Image,
-	TouchableOpacity
+	TouchableOpacity,
+	Animated
 } from 'react-native';
 
 
@@ -27,7 +28,7 @@ import { GenerateOperation, RandomWords } from '../controllers/randomMats';
 
 
 // Importing from resources
-import { words } from '../resources/resourcesLoad';
+import { words, animals, fruits } from '../resources/resourcesLoad';
 
 
 
@@ -37,12 +38,12 @@ import {
 	TestSheet
 } from './css/layout';
 
+import { APP_MAIN_COLOR } from '../settings/GlobalStyles';
 
 
 
 const DEVICE_SCREEN_HEIGHT = Dimensions.get('window').height;
 const DEVICE_SCREEN_WIDTH = Dimensions.get('window').width;
-const APP_MAIN_COLOR = 'rgb(50,50,170)';
 
 
 const localSheet = StyleSheet.create({
@@ -58,8 +59,8 @@ const localSheet = StyleSheet.create({
 		alignItems: 'center', justifyContent: 'center',
 		width: '47.5%', height: '44%', margin: 5,
 
-		borderRadius: 5, backgroundColor: 'rgb(255,255,255)',
-		elevation: 2,
+		borderRadius: 5, backgroundColor: 'rgba(255,255,255,0)',
+		// elevation: 2,
 	},
 	centerItems: {
 		alignItems: 'center', justifyContent: 'center',
@@ -70,7 +71,17 @@ const localSheet = StyleSheet.create({
 
 
 
-export class OperationsView extends Component {
+
+/// ================================================================================================
+/// ================================================================================================
+/// ================================================================================================
+/// ================================================================================================
+/// ================================================================================================
+
+
+
+
+export class OperationsScreen extends Component {
 
 	constructor(props) {
 		super(props);
@@ -84,15 +95,6 @@ export class OperationsView extends Component {
 	}
 
 
-	// UNSAFE_componentWillReceiveProps = () => {
-
-	// 	this.setState({
-	// 		operation: new GenerateOperation(this.props.level),
-	// 		level: this.props.level,
-	// 		time: this.props.time,
-	// 	});
-	// 	// console.log('Nuevos datos: time is: ', this.props.time)
-	// }
 
 
 	/**
@@ -128,7 +130,7 @@ export class OperationsView extends Component {
 
 		let output = items.map(element => {
 
-			return <ValueContainer valueSize={50} value={element} />
+			return <ValueContainer color="white" valueSize={50} value={element} />
 		});
 
 		return output;
@@ -139,7 +141,6 @@ export class OperationsView extends Component {
 	 * Add the operations components to the view
 	 */
 	insertOperation = () => {
-
 
 		let { first, second, operator, result } = this.state.operation;
 
@@ -181,7 +182,7 @@ export class OperationsView extends Component {
 				style={localSheet.menuOption}
 				onPress={() => this.makeOperation(item)}
 			>
-				<ValueContainer valueSize={50} value={item} />
+				<ValueContainer color="white" valueSize={50} value={item} />
 			</TouchableOpacity>
 		);
 	}
@@ -209,49 +210,58 @@ export class OperationsView extends Component {
 }
 
 
+/// =================================================================================================
+/// =================================================================================================
+/// =================================================================================================
+/// =================================================================================================
+
 
 
 export class CouplesScreen extends Component {
 
-	navBarHeight = 0;
-
-
 	constructor(props) {
 		super(props);
 		this.state = {
-			primaryWord: this.props.primaryWord ? this.props.primaryWord : RandomWords.generateRandomWord(),
-			secondaryWord: "",
-			optionPlaced: Math.round(Math.random()),
-			step: this.props.step,
+			generator: new RandomWords(this.props.navigation.state.params.type, this.props.navigation.state.params.items),
+			primaryElement: 'a',
+			secondaryElement: 'b',
+			imgDraggable: null,
+			optionPlaced: 1,
+			step: 1,
 		}
 
-		this.state.secondaryWord = RandomWords.generateRandomWord(this.state.primaryWord);
+		this.state.correct = this.state.primaryElement;
 
+		this.state.primaryElement = this.state.generator.generate();
+		this.state.secondaryElement = this.state.generator.generate(this.state.primaryElement);
+
+		this.state.middleImage = this.state.generator.getImage(this.state.primaryElement);
+
+		console.log(this.state.primaryElement)
+		console.log(this.state.middleImage)
 		this.arrows = [];
 	}
 
 	componentDidMount = () => {
-		;
+
+
 		this.arrows[0].animateSlideUp(true);
 		this.arrows[1].animateSlideDown(true);
 
-		console.log('The random value is: ', this.state.optionPlaced)
+		// console.log('This is my step: ', this.state)
+
+		// console.log('The random value is: ', this.state.optionPlaced)
 
 	}
 
-	componentWillUnmount() {
-		console.log('Seré desmontado couples')
-	}
+
+
 
 	shouldComponentUpdate() {
-		console.log('I have new props bro')
+		// console.log('I have new props bro: ', this.state)
+
+		return true;
 	}
-
-
-
-	/// <sumary>
-	///	Section divider
-	/// </summary>
 
 
 
@@ -261,14 +271,51 @@ export class CouplesScreen extends Component {
 	_optionCorrect = () => {
 		if (Math.round(Math.random()) == 1) {
 
-
-			this.props.navigation.setParams({ step: this.state.step + 1 })
-
-			// Refresh with the same data
+			this.props.navigation.navigate('ModalWin', { OnBackCallBack: this._OnBackCallBack });
 
 		} else {
-			// Refresh with the data fliped
+			this.props.navigation.navigate('ModalWin', { OnBackCallBack: this._OnBackCallBack });
 		}
+	}
+
+
+	/**
+	 * Is called before the modal screen pop()
+	 * This function is passed to another function and detect when is getting back.
+	 * 
+	 */
+	_OnBackCallBack = () => {
+
+
+		// Se comprueva si es neceseario cambiar datos al alcanzar las 7 interacciones
+		if (this.state.step >= 7) {
+
+			let newItem = this.state.generator.generate(this.state.primaryElement);
+			let newStep = 1;
+			let correct = newItem;
+			console.log('this are my new element: ', { newItem, newStep, correct });
+
+			this.setState({
+				primaryElement: newItem,
+				secondaryElement: this.state.generator.generate(newItem),
+				step: newStep,
+				middleImage: this.state.generator.getImage(newItem),
+				optionPlaced: 1,
+				correct,
+			});
+
+
+		} else {
+			let newStep = this.state.step + 1;
+
+			this.setState({
+				primaryElement: this.state.primaryElement,
+				secondaryElement: this.state.secondaryElement,
+				step: newStep,
+				optionPlaced: this.state.optionPlaced == 1 ? 0 : 1,
+			});
+		}
+
 	}
 
 
@@ -302,21 +349,26 @@ export class CouplesScreen extends Component {
 
 	insertOption = (pos) => {
 
+		let aux = 'default';
 
 		if (this.state.optionPlaced == pos) {
 
-			let aux = this.state.primaryWord.toLocaleLowerCase() + '_whitefill';
-			letter = (aux in words) ? words[aux] : words.c;
+			aux = this.state.primaryElement;
+			aux[0].toLocaleUpperCase();
+			// letter = (aux in words) ? words[aux] : words.c;
 			// console.log('The primary was added: ', aux)
 		} else {
-			let aux = this.state.secondaryWord.toLocaleLowerCase() + '_whitefill';
-			letter = (aux in words) ? words[aux] : words.c;
+			aux = this.state.secondaryElement;
+
+			aux[0].toLocaleUpperCase();
+			// letter = (aux in words) ? words[aux] : words.c;
 			// console.log('The secondary was added: ', aux)
 		}
 
 		return (
 			// Here will be an animated componen imporrted from components folder
-			<Image style={{ resizeMode: 'contain', flex: 1 }} source={letter} />
+			// <Image style={{ resizeMode: 'contain', flex: 1 }} source={letter} />
+			<Text style={{ fontSize: 20, color: 'white' }}>  {aux} </Text>
 		);
 	}
 
@@ -331,13 +383,12 @@ export class CouplesScreen extends Component {
 
 		return (
 			<View style={localSheet.absoluteFill}>
-				<View style={{ backgroundColor: 'green', height: this.navBarHeight, width: '100%' }}>
-					<Text>Algo para rellear</Text>
-				</View>
+
 
 				<View style={[{ flex: 1 }, localSheet.centerItems]}>
 
-					<View style={[{ width: 75, height: 75 }, localSheet.centerItems]}>
+					<View style={[{ width: '100%', height: 75 }, localSheet.centerItems]}>
+						{/* <Animated.View opacity={this.state.opacity} style={{ position: 'absolute', borderRadius: 30 ,height: 60, width: 60, backgroundColor: 'black' }} ></Animated.View> */}
 						{this.insertOption(1)}
 					</View>
 
@@ -346,17 +397,17 @@ export class CouplesScreen extends Component {
 				<View style={[{ flex: 2, zIndex: 100, alignItems: 'center', justifyContent: 'space-between' }]}>
 
 					<AnimatedIcon refer={this.getRefer} type="SlideUp" name='arrowup' size={80} color='rgba(255,255,255,0.1)' />
-					<Draggable onLeaveDrag={this.checkPositionDrag} size={90} image={words[this.state.primaryWord.toLocaleLowerCase()]} />
+					<Draggable onLeaveDrag={this.checkPositionDrag} size={90} image={this.state.middleImage} />
 					<AnimatedIcon refer={this.getRefer} type="SlideDown" name='arrowdown' size={80} color='rgba(255,255,255,0.1)' />
 
 				</View>
 				{/*  ======================================================  */}
 				<View style={[{ flex: 1, zIndex: 1 }, localSheet.centerItems]}>
-					<View style={[{ width: 75, height: 75 }, localSheet.centerItems]}>
+					<View style={[{ width: '100%', height: 75 }, localSheet.centerItems]}>
 						{this.insertOption(0)}
 					</View>
 				</View>
-
+				<Text>{this.state.step}</Text>
 			</View>
 		);
 	}

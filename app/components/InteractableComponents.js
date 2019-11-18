@@ -13,6 +13,8 @@ import {
 import { TestSheet, LayoutSheet } from '../screens/css/layout';
 
 
+import { words } from '../resources/resourcesLoad'
+
 
 
 const localSheet = StyleSheet.create({
@@ -71,17 +73,6 @@ export class Option extends Component {
 
 	}
 
-	UNSAFE_componentWillReceiveProps = () => {
-
-		this.setState({
-			value: this.props.value,
-			style: localSheet.enableCard,
-			disable: false,
-		});
-		this.render();
-	}
-
-
 
 	handlePress = () => {
 
@@ -130,15 +121,12 @@ export class ValueContainer extends Component {
 		super(props)
 		this.state = {
 			fontSize: new Animated.Value(this.props.valueSize),
-			value: new Animated.Value(2)
+			value: new Animated.Value(2),
+			// scale: new Animated.Value(1),
+			// opacity: new Animated.Value(0.2),
 		}
 	}
 
-
-
-	// UNSAFE_componentWillReceiveProps = () => {
-	// 	this.animateStart();
-	// }
 
 	componentDidMount = () => {
 		setTimeout(() => {
@@ -162,14 +150,43 @@ export class ValueContainer extends Component {
 				{ toValue: normalSize, friction: 3 }
 			),
 		]).start();
+
+		// Animated.loop(
+		// 	Animated.sequence([
+		// 		Animated.parallel([
+		// 			Animated.timing(this.state.scale, { toValue: 1.5, duration: 800, easing: Easing.linear }),
+		// 			Animated.timing(this.state.opacity, { toValue: 0, duration: 800, easing: Easing.linear })
+		// 		]),
+		// 		Animated.parallel([
+		// 			Animated.timing(this.state.scale, { toValue: 1.0, duration: 10, easing: Easing.linear }),
+		// 			Animated.timing(this.state.opacity, { toValue: 0.2, duration: 10, easing: Easing.linear })
+		// 		])
+		// 	])
+		// ).start();
 	}
 
 
 	render() {
 
+		let width = this.props.valueSize;
+		let height = width;
+		let styleAnimatedParent = {
+			width, height, flex: 1,
+			backgroundColor: 'black',
+			justifyContent: 'center', alignItems: 'center',
+			borderRadius: width / 2,
+			zIndex: 1,
+			position: 'absolute',
+			transform: [{ scale: this.state.scale }],
+		}
+
 		return (
-			<Animated.View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-				<Animated.Text style={{ fontSize: this.state.fontSize }}>{this.props.value}</Animated.Text>
+			<Animated.View style={{
+				flex: 1,
+				justifyContent: 'center', alignItems: 'center',
+			}} >
+				{/* <Animated.View opacity={this.state.opacity} style={styleAnimatedParent} /> */}
+				<Animated.Text style={{ zIndex: 10, color: this.props.color, fontSize: this.state.fontSize }}>{this.props.value}</Animated.Text>
 			</Animated.View>
 		);
 	}
@@ -193,10 +210,10 @@ export class Draggable extends Component {
 
 		this.state = {
 			isOnPlace: false,
-			Drag_Position_XY_Animated: new Animated.ValueXY(),
+			drag_position_xy_animated: new Animated.ValueXY(),
 			scale: new Animated.Value(1),
 			rotation: new Animated.Value(0),
-			img: this.props.image ? this.props.image : require('../resources/img/c.png'),
+			image: this.props.image ? this.props.image : require('../resources/img/c.png'),
 		};
 
 
@@ -209,7 +226,7 @@ export class Draggable extends Component {
 
 			// When the animation is happening
 			onPanResponderMove: Animated.event([
-				null, { dx: this.state.Drag_Position_XY_Animated.x, dy: this.state.Drag_Position_XY_Animated.y },
+				null, { dx: this.state.drag_position_xy_animated.x, dy: this.state.drag_position_xy_animated.y },
 			]),
 
 			/**
@@ -223,8 +240,8 @@ export class Draggable extends Component {
 
 
 	_handlePanResponderGrant = (e, gestureState) => {
-		this.state.Drag_Position_XY_Animated.setOffset({ x: this.state.Drag_Position_XY_Animated.x._value, y: this.state.Drag_Position_XY_Animated.y._value });
-		this.state.Drag_Position_XY_Animated.setValue({ x: 0, y: 0 });
+		this.state.drag_position_xy_animated.setOffset({ x: this.state.drag_position_xy_animated.x._value, y: this.state.drag_position_xy_animated.y._value });
+		this.state.drag_position_xy_animated.setValue({ x: 0, y: 0 });
 
 		Animated.spring(
 			this.state.scale,
@@ -237,22 +254,35 @@ export class Draggable extends Component {
 		let is_over_target = this.props.onLeaveDrag({ posY: gestureState.moveY })
 
 		if (is_over_target) {
-			
+
 			// This will be what it should do if is over the target
-			console.warn('Is over the target')
-		
+			// console.warn('Is over the target')
+			this._animateReturnCero();
 		} else {
 
 			this._animateReturnCero();
 		}
 
 
-		// por refactorizar bro //////////////////////////////////////////// 
+
+		// por refactorizar bro 		////////////////////////////////////////////
 
 
 
 
 	}
+
+
+	shouldComponentUpdate() {
+		return true;
+	}
+
+	static getDerivedStateFromProps(nextProps, prevState) {
+		return ({ ...nextProps })
+	}
+
+
+
 
 
 	_animateReturnCero = () => {
@@ -266,13 +296,16 @@ export class Draggable extends Component {
 					}
 				),
 				Animated.timing(
-					this.state.Drag_Position_XY_Animated,
+					this.state.drag_position_xy_animated,
 					{
 						toValue: { x: 0, y: 0 },
 						duration: 1,
 					}
 				),
 			]),
+			Animated.timing(
+				this.state.scale, { toValue: .6, duration: 1 }
+			),
 			Animated.parallel([
 				// Set the lopp for the shake animation
 				Animated.loop(
@@ -300,13 +333,6 @@ export class Draggable extends Component {
 
 
 
-	componentWillReceiveProps = () => {
-		this.setState({
-			img: this.props.image ? this.props.image : require('../resources/img/c.png'),
-		});
-	}
-
-
 	isDropZone = (transform) => {
 		let target = this.props.dropTarget();
 
@@ -331,7 +357,7 @@ export class Draggable extends Component {
 		let width = this.props.size;
 		let height = this.props.size;
 
-		let { Drag_Position_XY_Animated: pan, scale } = this.state;
+		let { drag_position_xy_animated: pan, scale } = this.state;
 		let translateX = pan.x;
 		let translateY = pan.y;
 		let rotate = this.state.rotation.interpolate({
@@ -355,7 +381,7 @@ export class Draggable extends Component {
 				{...this._panResponder.panHandlers}
 			>
 				<Image
-					source={this.state.img}
+					source={this.state.image}
 					style={{ resizeMode: 'contain', flex: 1 }}
 				/>
 			</Animated.View>

@@ -1,5 +1,5 @@
 
-import { words } from '../resources/resourcesLoad'
+import { words, animals, fruits } from '../resources/resourcesLoad'
 
 
 /**
@@ -61,19 +61,15 @@ interface operation {
     options: number[];
 }
 
-
-
-
 export class RandomWords {
 
-    static auxWords = "HIJKLMNÑOPQRSTWXYZ";
 
-    static words = "ABCDEFG";
-    static numbers = "1234567890";
+    type: string;
+    items: string[];
 
-    // Non implemented for now
-    static generateRandomNumber() {
-        return null;
+    constructor(type: string, items: []) {
+        this.type = type;
+        this.items = items;
     }
 
 
@@ -81,14 +77,14 @@ export class RandomWords {
      * Generate a random word ammong all the words of the classic keyboard
      * @param current the current value, used for don't generate the same number
      */
-    static generateRandomWord(current?: string): string {
+    generate(current?: string): string {
 
 
-        let output = RandomWords.words[Math.floor(Math.random() * RandomWords.words.length)];
+        let output = this.items[Math.floor(Math.random() * this.items.length)];
 
         if (current) {
-            while (output === current[0]) {
-                output = RandomWords.words[Math.floor(Math.random() * RandomWords.words.length)];
+            while (output === current) {
+                output = this.items[Math.floor(Math.random() * this.items.length)];
             }
         }
 
@@ -96,15 +92,34 @@ export class RandomWords {
         return output;
     }
 
-	/**
-	 * Compare two parameter and return a bolear if the value is completly equal to the second patameters
-	 * @param a first leter what will be compare with b
-	 * @param b string [char] to be compare
-	 */
-    static compare(a: string, b: string): boolean {
+    /**
+     * Return an image
+     * @param name Name of the element to generate
+     */
+    getImage(name: string) {
 
-        return (a === b) ? true : false;
+        name = name.toLocaleLowerCase();
 
+        let output;
+
+        switch (this.type) {
+            case 'animals':
+
+                output = animals[name];
+                break;
+            case 'fruits':
+                output = fruits[name];
+                break;
+            case 'letras':
+                output = words[name];
+                break;
+            default:
+                output = words['c'];
+                break;
+        }
+
+
+        return output;
     }
 
 }
