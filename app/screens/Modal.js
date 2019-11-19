@@ -1,7 +1,7 @@
 
 
 import React, { Component } from 'react';
-import { Text, View, Animated } from 'react-native';
+import { Text, View, Animated, TouchableWithoutFeedback } from 'react-native';
 
 import { Header } from '../components/Header'
 
@@ -76,18 +76,56 @@ export class ModalWinScreen extends Component {
 
 export class InformationModalScreen extends Component {
 
+    constructor(props) {
+        super(props);
+
+        this.state = {
+
+        }
+    }
+
+
+    static getDerivedStateFromProps(nextProps) {
+        return { ...nextProps }
+    }
+
+    render() {
+
+        // let { title, data } = this.props.navigation.state.params;
+
+        return (
+            <View style={{ width: '70%', height: '60%', backgroundColor: AppColors.background, elevation: 20 }}>
+                <Icon name="close" size={30} color={AppColors.secondary} />
+                <Text>
+                    Esté contenido no se encuentra disponible
+                </Text>
+            </View>
+        );
+    }
+}
+
+
+export class ModalToBuy extends Component {
+
+
 
 
     render() {
 
-        let { title, data } = this.props.navigation.state.params;
-        
+
+
+
         return (
-            <View style={{ flex: 1, backgroundColor: AppColors.background }}>
-                <Header navigation={this.props.navigation} onBack={true} title={title} />
-                <Text style={{ color: AppColors.textOverColorLight, padding: 15, fontSize: 16 }} >
-                    {data}
-                </Text>
+            <View
+                style={{ width: '100%', height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.4)', alignItems: 'center', justifyContent: 'center' }}
+            >
+            
+                <View style={{ width: '70%', height: '60%', backgroundColor: AppColors.background, elevation: 20, zIndex: 20, borderRadius: 15 }}>
+                    <TouchableWithoutFeedback >
+                        <Icon name="close" size={24} color={AppColors.secondary} />
+                    </TouchableWithoutFeedback>
+                    
+                </View>
             </View>
         );
     }

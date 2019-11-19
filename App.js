@@ -24,9 +24,10 @@ import { createStackNavigator } from 'react-navigation-stack';
 /// Importing Screens
 import { SettingsScreen } from './app/screens/Main'
 import { ModalWinScreen, InformationModalScreen } from './app/screens/Modal'
-import MenuScreen from './app/screens/Menu';
 import { CouplesScreen, OperationsScreen } from './app/screens/Playground'
 
+import ProgressScreen from './app/screens/Progress'
+import MenuScreen from './app/screens/Menu';
 
 
 /// Importing styleSheet and Colors
@@ -53,33 +54,33 @@ export default class App extends Component {
 
 
 
-const MenuStackNavigator = createAppContainer(
-  createStackNavigator({
-    Menu: {
-      screen: MenuScreen,
-      navigationOptions: () => ({
-        header: null
-      }),
-    },
-    InformationModal: {
-      screen: InformationModalScreen,
-      navigationOptions: ({ navigation }) => ({
-        header: null,
-        modal: true
-      })
-    },
+// const MenuStackNavigator = createAppContainer(
+//   createStackNavigator({
+//     Menu: {
+//       screen: MenuScreen,
+//       navigationOptions: () => ({
+//         header: null
+//       }),
+//     },
+//     InformationModal: {
+//       screen: InformationModalScreen,
+//       navigationOptions: ({ navigation }) => ({
+//         header: null,
+//         modal: true
+//       })
+//     },
 
-  },
-    {
-      initialRouteName: 'Menu'
-    })
-);
+//   },
+//     {
+//       initialRouteName: 'Menu'
+//     })
+// );
 
 // This element will be introduced onto the Stack Navigator component above.
 const TabNavigator = createAppContainer(
   createMaterialBottomTabNavigator({
     Menu: {
-      screen: MenuStackNavigator,
+      screen: MenuScreen,
       navigationOptions: {
         tabBarLabel: 'Menú',
         tabBarIcon: ({ tintColor }) => (
@@ -94,6 +95,16 @@ const TabNavigator = createAppContainer(
         tabBarLabel: 'Ajustes',
         tabBarIcon: ({ tintColor }) => (
           <Icon name="gear" color={tintColor} size={24} />
+        ),
+
+      }
+    },
+    Progress: {
+      screen: ProgressScreen,
+      navigationOptions: {
+        tabBarLabel: 'Progreso',
+        tabBarIcon: ({ tintColor }) => (
+          <Icon name="book" color={tintColor} size={24} />
         ),
 
       }
@@ -120,7 +131,7 @@ const StackNavigator = createAppContainer(
     Couples: {
       screen: CouplesScreen,
       navigationOptions: () => ({
-        title: 'couples'
+        header: null,
       }),
     },
     Operations: {

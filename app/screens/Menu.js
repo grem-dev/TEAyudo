@@ -15,16 +15,20 @@ import {
     Text,
     StyleSheet,
     FlatList,
-    ScrollView
+    ScrollView,
+    Modal,
+    TouchableHighlight,
+    TouchableWithoutFeedback
 } from 'react-native';
 
 
 import { MenuHorizontalScroll } from '../components/MenuComponents';
 import { Header } from '../components/Header';
-
-import { AppColors } from '../settings/GlobalStyles'
+import { ModalToBuy } from './Modal';
+import { AppColors } from '../settings/GlobalStyles';
 
 import { Tree } from '../settings/MenuOptions'
+import { } from 'react-native-gesture-handler';
 
 
 export default class MenuScreen extends Component {
@@ -33,7 +37,9 @@ export default class MenuScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            optionsMenu: Tree
+            optionsMenu: Tree,
+            isModalVisible: true,
+            modalOpacity: 1,
         };
     }
 
@@ -42,12 +48,23 @@ export default class MenuScreen extends Component {
      */
     _insertItemsMenu = () => {
 
-        return this.state.optionsMenu.map((item) => {
+        return this.state.optionsMenu.map((item, key) => {
             return (
-                <MenuHorizontalScroll titleColor={AppColors.textOverColorLight} navigation={this.props.navigation} item={item} />
+                <MenuHorizontalScroll key={key} itemBlokedOnPress={() => this.setModalVisible(!this.state.isModalVisible)} titleColor={AppColors.textOverColorLight} navigation={this.props.navigation} item={item} />
             );
         });
     }
+
+
+    setModalVisible = (newStateVisibility) => {
+
+        console.log('Pos me llamaron')
+        this.setState({
+            isModalVisible: newStateVisibility,
+
+        })
+    }
+
 
 
 
@@ -58,8 +75,19 @@ export default class MenuScreen extends Component {
                     <Header titleColor={AppColors.textOverColorLight} title="Menú" />
                     {this._insertItemsMenu()}
                 </ScrollView>
-                {/* <Text onPress={() => { this.props.navigation.navigate('Couples', { step: 1 }) }}>asdad</Text> */}
-            </View>
+{/* 
+                <Modal
+                    animationType="fade"
+                    transparent={true}
+                    visible={this.state.isModalVisible}
+
+                >
+                    <ModalToBuy onClose={() => this.setModalVisible(!this.state.isModalVisible)} />
+
+                </Modal> */}
+
+
+            </View >
         );
     } // End of the render method
 }

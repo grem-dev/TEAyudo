@@ -5,6 +5,7 @@ import React, {
 import {
 	View,
 	Text,
+	Image,
 	StyleSheet,
 	ScrollView,
 	TouchableWithoutFeedback,
@@ -31,8 +32,8 @@ export class MenuHorizontalScroll extends Component {
 	}
 
 	_insertItemMenu = (items) => {
-		return items.map(item => {
-			return <Card navigation={this.props.navigation} data={item} />
+		return items.map((item, key) => {
+			return <Card key={key} itemBlokedOnPress={this.props.itemBlokedOnPress} navigation={this.props.navigation} data={item} />
 		});
 	}
 
@@ -82,13 +83,11 @@ export class Card extends Component {
 
 	render() {
 
-		let { image,title, description, enabled, items, toNavigate, type } = this.state.data;
-		
-
+		let { image, title, description, enabled, items, toNavigate, type } = this.state.data;
 		let { navigate } = this.props.navigation;
 
-		let scale = this.state.scale;
 
+		let scale = this.state.scale;
 		let animatedStyles = {
 			transform: [
 				{ scale }
@@ -100,62 +99,65 @@ export class Card extends Component {
 				<TouchableWithoutFeedback
 					onPress={() => { navigate(toNavigate, { type, items }) }}
 				>
-					<Animated.View style={[animatedStyles, { paddingTop: 10, paddingHorizontal: 10, alignItems: 'center', justifyContent: 'center' }]}>
-						<View style={{ elevation: 5, backgroundColor: AppColors.primary, width: 120, height: 120, borderRadius: 30 }}>
-							<TouchableWithoutFeedback
-								onPress={() => {
-									this._animateBounce();
-									navigate('InformationModal', { title: title, data: description })
-								}}
-							>
-								<View style={{ position: 'absolute', right: 10, top: 10 }} >
-									<IconComunity name="information-outline" size={33} color={AppColors.secondary} />
-								</View>
-								<View   
-									style={{ position: 'absolute', right: 10, bottom: 10 }}
-								>
-								{/* <Image style={{}} source={image}/> */}
-								</View>
-							</TouchableWithoutFeedback>
+					<Animated.View
+						style={[animatedStyles, localSheet.cardMenuStyle]}>
 
-						</View>
-						<View
-							style={{
-								elevation: 10, borderRadius: 10, alignItems: 'center',
-								justifyContent: 'center', translateY: -20, backgroundColor: AppColors.secondary,
-								width: 80, minHeight: 40
+						<Text style={{ position: 'absolute', top: 10, color: 'rgba(255,255,255,0.9)', fontSize: 19, left: 5 }} > {title} </Text>
+
+
+						{/* <TouchableWithoutFeedback
+							onPress={() => {
+								this._animateBounce();
+								navigate('InformationModal', { title: title, data: description })
 							}}
 						>
-							<Text style={{ color: AppColors.textOverColor }}>
-								{title}
-							</Text>
+							<View style={{ position: 'absolute', right: 0, top: 0 }} >
+								<IconComunity name="information-outline" size={35} color={AppColors.secondary} />
+							</View>
+						</TouchableWithoutFeedback> */}
+
+						<View opacity={0.25} style={{ position: 'absolute', bottom: 10, right: 10, height: 45, width: 45, zIndex: 20 }}>
+							<Image style={{ resizeMode: 'center', width: '100%', height: '100%' }} source={image} />
 						</View>
+
 					</Animated.View>
 
 				</TouchableWithoutFeedback >
 			);
 		else {
 			return (
-				<TouchableWithoutFeedback >
-					<Animated.View style={[animatedStyles, { paddingTop: 10, paddingHorizontal: 10, alignItems: 'center', justifyContent: 'center' }]}>
-						<View style={{ elevation: 1, backgroundColor: AppColors.primaryDark, width: 120, height: 120, borderRadius: 30, justifyContent: 'center', alignItems: 'center' }}>
-							<IconComunity name="lock-alert" size={50} color={AppColors.secondaryLight} />
+				<TouchableWithoutFeedback
+					onPress={() => { this.props.itemBlokedOnPress() }}
+				>
+					<Animated.View
+						style={[animatedStyles, localSheet.cardMenuStyle]}>
 
-						</View>
-						<View
-							style={{
-								elevation: 3, borderRadius: 10, alignItems: 'center',
-								justifyContent: 'center', translateY: -20, backgroundColor: AppColors.secondary,
-								width: 80, minHeight: 40
+						<Text style={{ position: 'absolute', top: 10, color: 'white', fontSize: 19, left: 5 }} > {title} </Text>
+
+
+						{/* <TouchableWithoutFeedback
+							onPress={() => {
+								this._animateBounce();
+								navigate('InformationModal', { title: title, data: description })
 							}}
 						>
-							<Text style={{ color: AppColors.textOverColor }}>
-								{title}
-							</Text>
+							<View style={{ position: 'absolute', right: 0, top: 0 }} >
+								<IconComunity name="information-outline" size={35} color={AppColors.secondary} />
+							</View>
+						</TouchableWithoutFeedback> */}
+
+						{/* <View opacity={0.25} style={{ position: 'absolute', bottom: 10, right: 10, height: 45, width: 45, zIndex: 20 }}>
+							<Image style={{ resizeMode: 'center', width: '100%', height: '100%' }} source={image} />
+						</View> */}
+
+						<View style={{ width: 90, height: 90, borderRadius: 30, justifyContent: 'center', alignItems: 'center' }}>
+							<IconComunity name="lock-alert" size={50} color='white' />
 						</View>
+
 					</Animated.View>
 
 				</TouchableWithoutFeedback >
+
 			);
 		}
 
@@ -187,5 +189,12 @@ const localSheet = StyleSheet.create({
 	img: {
 		backgroundColor: 'rgb(100,100,100)',
 	},
+	cardMenuStyle: {
+		paddingTop: 10, paddingHorizontal: 10,
+		marginRight: 12, marginTop: 15, marginBottom: 20,
+		elevation: 4,
+		alignItems: 'center', justifyContent: 'center',
+		width: 140, height: 110, borderRadius: 10, backgroundColor: AppColors.primary,
 
+	}
 })

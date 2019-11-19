@@ -17,6 +17,8 @@ import {
 } from 'react-native';
 
 
+const progressData = require('../settings/progress.json');
+
 import Icon from 'react-native-vector-icons/AntDesign';
 
 
@@ -219,6 +221,8 @@ export class OperationsScreen extends Component {
 
 export class CouplesScreen extends Component {
 
+	headerHeight = 50;
+
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -320,7 +324,7 @@ export class CouplesScreen extends Component {
 
 
 	checkPositionDrag = ({ posY }) => {
-		if (posY < (DEVICE_SCREEN_HEIGHT * 0.20)) {
+		if (posY < (DEVICE_SCREEN_HEIGHT * 0.25 + this.headerHeight)) {
 
 
 			if (this.state.optionPlaced == 1) {
@@ -328,7 +332,7 @@ export class CouplesScreen extends Component {
 				return true;
 			}
 
-		} else if (posY > (DEVICE_SCREEN_HEIGHT * 0.80)) {
+		} else if (posY > (DEVICE_SCREEN_HEIGHT * 0.75)) {
 
 			if (this.state.optionPlaced == 0) {
 				this._optionCorrect(0);
@@ -384,6 +388,13 @@ export class CouplesScreen extends Component {
 		return (
 			<View style={localSheet.absoluteFill}>
 
+				<View style={{ height: this.headerHeight, width: '100%' }}>
+					<TouchableOpacity
+						onPress={() => { this.props.navigation.goBack() }}
+					>
+						<Icon style={{ margin: 10 }} name="arrowleft" size={40} color="white" />
+					</TouchableOpacity>
+				</View>
 
 				<View style={[{ flex: 1 }, localSheet.centerItems]}>
 

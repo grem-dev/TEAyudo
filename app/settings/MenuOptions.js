@@ -49,9 +49,18 @@ export const Tree = [
     {
         title: 'Plantas',
         options: [
-            { title: 'Frutos', image: null, enabled: true },
-            { title: 'Verduras', image: null, enabled: false },
-            { title: 'otros', image: null, enabled: false },
+            {
+                title: 'Frutos', image: fruits.cereza, toNavigate: 'Couples',
+                enabled: true, type: 'fruits', items: ['Aguacate', 'Arandano', 'Banan', 'Cereza', 'Coco', 'Durazno', 'Fresa', 'Granada']
+            },
+            {
+                title: 'Más frutos', image: fruits.kiwi, toNavigate: 'Couples',
+                enabled: true, type: 'fruits', items: ['Kiwi', 'Limón']
+            },
+            {
+                title: 'otros', image: fruits.uva, toNavigate: 'Couples',
+                enabled: false
+            },
         ]
     },
     {

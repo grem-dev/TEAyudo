@@ -74,6 +74,7 @@ export const fruits = {
     durazno: require('./img/fruits/durazno.png'),
     fresa: require('./img/fruits/fresa.png'),
     granada: require('./img/fruits/granada.png'),
+    kiwi: require('./img/fruits/kiwi.png'),
     limón: require('./img/fruits/limon.png'),
     mandarina: require('./img/fruits/mandarina.png'),
     manzana: require('./img/fruits/manzana.png'),
